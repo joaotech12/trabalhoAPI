@@ -24,19 +24,6 @@ namespace teste.Controllers
             return Ok(clientes);
         }
 
-        [HttpPost]
-        public async Task<ActionResult<Clientes>> PostCliente(Clientes clientes)
-        {
-            _context.clientes.Add(clientes);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(
-                nameof(Get),
-                new { id = clientes.id },
-                clientes
-            );
-        }
-
        
         [HttpDelete("{id}")]
         public async Task<IActionResult> Deleteclientes(int id)
@@ -74,7 +61,44 @@ namespace teste.Controllers
                clientes
             );
         }
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutProduto(int id, Clientes clientes)
+        {
+            if (id != clientes.Id)
+            {
+                return BadRequest(new
+                {
+                    mensagem = "O ID da URL é diferente do ID do produto."
+                });
+            }
+
+            var produtoExistente = await _context.clientes.FindAsync(id);
+
+            if (produtoExistente == null)
+            {
+                return NotFound(new
+                {
+                    mensagem = "Cliente não encontrado."
+                });
+            }
+
+            produtoExistente.nome = clientes.nome;
+            produtoExistente.cpf = clientes.cpf;
+            produtoExistente.telefone = clientes.telefone;
+            
+
+            await _context.SaveChangesAsync();
+
+            return Ok(produtoExistente);
+        }
+
+
+
+
+
+
     }
+
 }
 
 

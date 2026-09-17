@@ -49,16 +49,16 @@ namespace teste.Controllers
             });
         }
         [HttpPost]
-        public async Task<ActionResult<CadastroCategorias>> PostcadastroCategorias(ItensVenda itensVendas)
+        public async Task<ActionResult<CadastroCategorias>> PostcadastroCategorias(CadastroCategorias cadastrocategorias)
         {
-            _context.itens_venda.Add(itensVendas);
+            _context.cadastroCategorias.Add(cadastrocategorias);
 
             await _context.SaveChangesAsync();
 
             return CreatedAtAction(
                 nameof(Get),
-                new { Id = itensVendas.Id },
-               itensVendas
+                new { Id = cadastrocategorias.Id },
+               cadastrocategorias
             );
         }
     }

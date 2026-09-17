@@ -49,5 +49,37 @@ namespace teste.Controllers
                frutas
             );
         }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutFrutas(int id, Frutas frutas)
+        {
+            if (id != frutas.Id)
+            {
+                return BadRequest(new
+                {
+                    mensagem = "O ID da URL é diferente do ID do produto."
+                });
+            }
+
+            var produtoExistente = await _context.frutas.FindAsync(id);
+
+            if (produtoExistente == null)
+            {
+                return NotFound(new
+                {
+                    mensagem = "Produto não encontrado."
+                });
+            }
+
+            produtoExistente.Nome = frutas.Nome;
+            produtoExistente.categoria_id = frutas.categoria_id;
+            produtoExistente.preco = frutas.preco;
+            produtoExistente.estoque = frutas.estoque;
+            produtoExistente.validade = frutas.validade;
+
+            await _context.SaveChangesAsync();
+
+            return Ok(produtoExistente);
+        }
     }
 }
